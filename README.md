@@ -11,6 +11,8 @@
 - [ ] Retornar 3 últimas mensagens
 - [ ] Criar profile do user
 
-## BUGS 🪳
+## BUGS
 
-- [ ] Ajustar bug na autenticação com o GitHub
+- [x] Ajustar bug na autenticação com o GitHub
+  - Não esqueça do await em async functions
+  - Obrigado levi
