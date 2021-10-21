@@ -1,4 +1,6 @@
 import axios from 'axios'
+import prisma from '../prisma'
+import {sign} from 'jsonwebtoken'
 /**]
  * Recebe o code(string)
  * Recuperar o acess token no github
@@ -8,11 +10,22 @@ import axios from 'axios'
  * Retornar o token com as infos do usuário logado
  */
 
+interface iAcessTokenResponse {
+  access_token: string
+}
+
+interface iUserResponse {
+  avatar_url: string
+  login: string
+  id: number
+  name: string
+}
+
 class AuthenticateUserService {
   async execute(code: string) {
     const url = "https://github.com/login/oauth/access_token"
 
-    const response = await axios.post(url, null, {
+    const {data: accessTokenResponse} = await axios.post<iAcessTokenResponse>(url, null, {
       params: {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -23,8 +36,47 @@ class AuthenticateUserService {
       }
     })
 
-    return response.data
+    const response = await axios.get<iUserResponse>(`https://api.github.com/user`, {
+      headers: {
+        authorization: `Bearer ${accessTokenResponse.access_token}`
+      }
+    })
 
+    const {login, id, avatar_url, name} = response.data
+
+    let user = await prisma.user.findFirst({
+      where: {
+        github_id: id
+      }
+    })
+
+    if(!user) {
+      user = await prisma.user.create({
+        data: {
+          github_id: id,
+          login,
+          avatar_url,
+          name
+        }
+      })
+    }
+
+    const token = sign(
+      {
+        user: {
+          name: user.name,
+          avatar_url: user.avatar_url,
+          id: user.id
+        },
+      },
+      process.env.JWT_SECRET,
+      {
+        subject: user.id,
+        expiresIn: "1d"
+      }
+    )
+
+    return {token, user}
   }
 }
 
