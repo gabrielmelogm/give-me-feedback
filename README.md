@@ -1,4 +1,27 @@
-## CHECKLIST
+# NLW Heat
+Aplicação node feito durante o evento NLW
+
+## FEATURES 🚀
+- Express
+- oauth (GitHub)
+- Prisma (Sqlite)
+
+## INICIANDO O PROJETO
+- Clonar esse repositório
+- Execultar o comando <code>yarn</code> para instalar as dependências
+- Criar o arquivo .env:
+  - DATABASE_URL
+    - url do seu banco de dados de preferência
+  - GITHUB_CLIENT_SECRET
+    - Obito através do GitHub
+  - GITHUB_CLIENT_ID
+    - Obito através do GitHub junto com o GITHUB_CLIENT_SECRET
+  - JWT_SECRET
+    - Uma senha segura de sua preferência
+
+## UM RESUMO DO CAMINHO QUE SEGUIMOS PARA CRIAR ESSA APLICAÇÃO
+
+### CHECKLIST
 
 - [x] Criar projeto
 - [x] Instalar Express, Prisma, Typescript
@@ -11,7 +34,7 @@
 - [x] Retornar 3 últimas mensagens
 - [x] Criar profile do user
 
-## BUGS
+### BUGS
 
 - [x] Ajustar bug na autenticação com o GitHub
   - Não esqueça do await em async functions
