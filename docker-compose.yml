@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  give-me-feedback:
+    image: mariadb
+    container_name: give-me-feedback
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: give-me-feedback
